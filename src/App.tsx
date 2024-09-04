@@ -1,35 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import {CurrencySelector} from "./components/CurrencySelector";
+import {Box, TextField} from "@mui/material";
+import {useCurrenciesData} from "./hooks/useCurrenciesData";
+import {addAmountAction, addSourceAction, addTargetAction, useExchangeState} from "./hooks/useExchangeState";
+import {useConvertData} from "./hooks/useConvertData";
+import {parseNumericInput} from "./utils/parseNumericInput";
+import {floor} from "lodash";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [currencies, loading, error] = useCurrenciesData();
+    const [exchangeState, dispatch] = useExchangeState();
+    const [conversion, loadingConversion, conversionErrors] = useConvertData(exchangeState.sourceCurrency, exchangeState.targetCurrency, exchangeState.amount);
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    if (error || conversionErrors) return <div>Error: {error || conversionErrors}</div>;
+
+    if (loading) return <div>Loading...</div>;
+
+    return (
+        <div className="App">
+            <header className="App-header">
+                <h1>Currency Converter</h1>
+            </header>
+            <Box sx={{display: 'flex'}}>
+                <TextField value={exchangeState.amount} inputProps={{type: 'number'}} onChange={(e) => dispatch(addAmountAction(parseNumericInput(e)))}/>
+                <CurrencySelector currencies={currencies!} onCurrencyChange={(c) => c && dispatch(addSourceAction(c.short_code))} label={'From'} defaultValueShortCode={"USD"}/>
+                <CurrencySelector currencies={currencies!} onCurrencyChange={(c) => c && dispatch(addTargetAction(c.short_code))} label={'To'} defaultValueShortCode={"PLN"}/>
+            </Box>
+            <Box>
+                {loadingConversion ? 'Loading...' : conversion ? `${conversion.amount} ${conversion.from} = ${floor(conversion.value, 2)} ${conversion.to}` : 'No conversion yet'}
+            </Box>
+        </div>
+    )
 }
 
 export default App
