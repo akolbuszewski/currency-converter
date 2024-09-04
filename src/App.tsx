@@ -22,9 +22,14 @@ function App() {
                 <h1>Currency Converter</h1>
             </header>
             <Box sx={{display: 'flex'}}>
-                <TextField value={exchangeState.amount} inputProps={{type: 'number'}} onChange={(e) => dispatch(addAmountAction(parseNumericInput(e)))}/>
-                <CurrencySelector currencies={currencies!} onCurrencyChange={(c) => c && dispatch(addSourceAction(c.short_code))} label={'From'} defaultValueShortCode={"USD"}/>
-                <CurrencySelector currencies={currencies!} onCurrencyChange={(c) => c && dispatch(addTargetAction(c.short_code))} label={'To'} defaultValueShortCode={"PLN"}/>
+                <TextField value={exchangeState.amount} inputProps={{type: 'number'}}
+                           onChange={(e) => dispatch(addAmountAction(parseNumericInput(e)))}/>
+                <CurrencySelector currencies={currencies!}
+                                  onCurrencyChange={(c) => c && dispatch(addSourceAction(c.short_code))} label={'From'}
+                                  defaultValueShortCode={"USD"}/>
+                <CurrencySelector currencies={currencies!}
+                                  onCurrencyChange={(c) => c && dispatch(addTargetAction(c.short_code))} label={'To'}
+                                  defaultValueShortCode={"PLN"}/>
             </Box>
             <Box>
                 {loadingConversion ? 'Loading...' : conversion ? `${conversion.amount} ${conversion.from} = ${floor(conversion.value, 2)} ${conversion.to}` : 'No conversion yet'}

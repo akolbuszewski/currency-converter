@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {isAxiosError} from "axios";
 
-export function useData<T>(promise: Promise<T>): [T | null, boolean, string | null] | []{
+export function useData<T>(promise: Promise<T>): [T | null, boolean, string | null] | [] {
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);

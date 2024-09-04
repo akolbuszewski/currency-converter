@@ -5,7 +5,11 @@ export const addSourceAction = (currency: string) => ({type: 'addSourceCurrency'
 export const addTargetAction = (currency: string) => ({type: 'addTargetCurrency', currency}) as const;
 export const addAmountAction = (amount: number) => ({type: 'addAmount', amount}) as const;
 
-type Action = ReturnType<typeof addSourceAction> | ReturnType<typeof addTargetAction> | ReturnType<typeof addAmountAction>;
+type Action =
+    ReturnType<typeof addSourceAction>
+    | ReturnType<typeof addTargetAction>
+    | ReturnType<typeof addAmountAction>;
+
 function reducer(state: ExchangeState, action: Action) {
     switch (action?.type) {
         case 'addSourceCurrency':
@@ -24,6 +28,7 @@ const initialState: ExchangeState = {
     targetCurrency: 'PLN',
     amount: 1
 }
+
 export function useExchangeState(): [ExchangeState, (action: Action) => void] {
     const [state, dispatch] = useReducer(reducer, initialState);
 

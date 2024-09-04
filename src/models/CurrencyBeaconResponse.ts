@@ -1,4 +1,4 @@
-export interface CurrencyBeaconResponse<T>{
+export interface CurrencyBeaconResponse<T> {
     meta: {
         code: number;
         disclaimer: string;
