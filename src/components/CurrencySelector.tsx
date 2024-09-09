@@ -1,7 +1,6 @@
 import {CurrencyData} from "../models/CurrencyData";
 import {Autocomplete, TextField, Box} from "@mui/material";
-import {useEffect, useState} from "react";
-import {useExchangeState} from "../hooks/useExchangeState";
+import { useState} from "react";
 
 export interface CurrencySelectorProps {
     currencies: Array<CurrencyData>;
